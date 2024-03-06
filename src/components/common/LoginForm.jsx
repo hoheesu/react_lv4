@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import InputForm from "./InputForm";
 import ButtonForm from "./ButtonForm";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { inputValueTrim } from "../../util/inputValueTrim";
 
 function LoginForm({ children, handleUserApi }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [inputValue, setInputValue] = useState({
     id: "",
@@ -18,19 +20,14 @@ function LoginForm({ children, handleUserApi }) {
       return newState;
     });
   };
-  useEffect(() => {
-    console.log(inputValueTrim(inputValue.id));
-  }, [inputValue]);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        {
-          inputValueTrim(inputValue.id) && inputValueTrim(inputValue.password)
-            ? handleUserApi(inputValue, navigate)
-            : alert("id와 비밀번호 모두 입력해주세요");
-        }
+        inputValueTrim(inputValue.id) && inputValueTrim(inputValue.password)
+          ? handleUserApi(inputValue, navigate, dispatch)
+          : alert("id와 비밀번호 모두 입력해주세요");
         setInputValue({
           id: "",
           password: "",

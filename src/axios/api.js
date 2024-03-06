@@ -1,29 +1,29 @@
 import axios from "axios";
 import instance from "./axios";
 import { Cookies } from "react-cookie";
+import { errorHandle } from "../redux/modules/errorModalSlice";
 
 const cookie = new Cookies();
 
-export const requestSignUp = async (userInfo, navigate) => {
+export const requestSignUp = async (userInfo, navigate, dispatch) => {
   try {
     const res = await instance.post("register", userInfo);
-    console.log(res);
     navigate("/login");
   } catch (error) {
+    dispatch(errorHandle(error.response.data.message));
     console.log(error.response.data.message);
   }
 };
 
-export const requestLogin = async (userInfo, navigate) => {
+export const requestLogin = async (userInfo, navigate, dispatch) => {
   try {
     const res = await instance.post("login", userInfo);
     const { token } = res.data;
-    console.log(token);
-    console.log(res);
     // cookie.set("token", `Bearer ${token}`);
     navigate("/");
     return cookie.set("token", `Bearer ${token}`, {});
   } catch (error) {
+    dispatch(errorHandle(error.response.data.message));
     console.log(error.response.data.message);
   }
 };
@@ -36,9 +36,9 @@ export const requestUserCheck = async () => {
     });
     const { statusText } = res;
     console.log(statusText);
-    console.log(res);
     return statusText;
   } catch (error) {
     console.log(error.response.data.message);
+    return error.response.data.message;
   }
 };

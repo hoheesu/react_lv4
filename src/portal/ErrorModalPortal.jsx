@@ -1,36 +1,34 @@
 import React from "react";
 import styled from "styled-components";
 import ButtonForm from "../components/common/ButtonForm";
+import { useDispatch, useSelector } from "react-redux";
+import { errorHandle } from "../redux/modules/errorModalSlice";
 
-const MyModal = ({}) => {
-  const btnNum = [];
-  for (let i = 1; i <= buttonNum; i++) {
-    btnNum.push(i);
-  }
+const ErrorModalPortal = ({ children }) => {
+  const errorModalText = useSelector((state) => state.errorModal.errorText);
+  const errorHandleFnc = useSelector((state) => state.errorModal.btnHandleFnc);
+
+  const dispatch = useDispatch();
+  const handleCloseModal = () => {
+    if (errorHandleFnc) {
+      errorHandleFnc(); // 필요한 데이터로 함수 대신 함수를 직접 호출합니다.
+    }
+    dispatch(errorHandle(""));
+  };
   return (
     <>
-      <Background onClick={overTab ? handleOverTabClose : () => {}}></Background>
+      <Background onClick={handleCloseModal}></Background>
       <ModalMain>
-        <p>{children}</p>
+        <p>{errorModalText}</p>
         <ButtonBox>
-          {btnNum.map((el) => {
-            return (
-              <ButtonForm
-                key={el}
-                type="small"
-                onClickFnc={el === 1 ? handleCloseModal : handlePlayModal}
-                $bo={el === 1 ? "dark-purple" : "yellow"}>
-                {el === 1 ? "닫기" : "확인"}
-              </ButtonForm>
-            );
-          })}
+          <ButtonForm onClickFnc={handleCloseModal}>확인</ButtonForm>
         </ButtonBox>
       </ModalMain>
     </>
   );
 };
 
-export default MyModal;
+export default ErrorModalPortal;
 
 const Background = styled.div`
   width: 100vw;
@@ -55,11 +53,11 @@ const ModalMain = styled.div`
   row-gap: 2rem;
   padding: 1rem;
   width: 20rem;
-  height: 20rem;
+  height: 10rem;
   z-index: 101;
-  background-color: var(--color-white);
-  border: 2px solid var(--color-default);
-  color: var(--color-default);
+  background-color: #fff;
+  border: 2px solid #333;
+  color: #333;
 `;
 const ButtonBox = styled.div`
   display: flex;
