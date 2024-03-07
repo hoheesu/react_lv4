@@ -1,8 +1,9 @@
 import React from "react";
+import styled from "styled-components";
 
 function ButtonForm({ children, onClickFnc, type }) {
   return (
-    <button
+    <ButtonStyle
       type={type}
       onClick={
         onClickFnc
@@ -12,8 +13,11 @@ function ButtonForm({ children, onClickFnc, type }) {
           : null
       }>
       {children}
-    </button>
+    </ButtonStyle>
   );
 }
-
+const ButtonStyle = styled.button`
+  width: 100%;
+  background-color: var(--color-white);
+`;
 export default ButtonForm;

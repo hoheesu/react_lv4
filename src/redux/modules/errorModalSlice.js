@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isError: false,
   errorText: "",
-  btnHandleFnc: null,
+  btnHandleFnc: "",
 };
 
 export const errorModalSlice = createSlice({

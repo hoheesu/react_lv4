@@ -1,18 +1,18 @@
 import React from "react";
-import styled from "styled-components";
-import ButtonForm from "../components/common/ButtonForm";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { errorHandle } from "../redux/modules/errorModalSlice";
+import styled from "styled-components";
+import ButtonForm from "../components/common/ButtonForm";
 
-const ErrorModalPortal = ({ children }) => {
+const ErrorModalPortal = () => {
+  const navigate = useNavigate();
   const errorModalText = useSelector((state) => state.errorModal.errorText);
   const errorHandleFnc = useSelector((state) => state.errorModal.btnHandleFnc);
 
   const dispatch = useDispatch();
   const handleCloseModal = () => {
-    if (errorHandleFnc) {
-      errorHandleFnc(); // 필요한 데이터로 함수 대신 함수를 직접 호출합니다.
-    }
+    navigate(errorHandleFnc);
     dispatch(errorHandle(""));
   };
   return (

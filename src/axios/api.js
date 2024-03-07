@@ -19,12 +19,14 @@ export const requestLogin = async (userInfo, navigate, dispatch) => {
   try {
     const res = await instance.post("login", userInfo);
     const { token } = res.data;
-    // cookie.set("token", `Bearer ${token}`);
     navigate("/");
-    return cookie.set("token", `Bearer ${token}`, {});
+    const expirationDate = new Date(new Date().getTime() + 1 + 60000); // 현재 시간에 분을 더해 만료 시간 설정
+    return cookie.set("token", `Bearer ${token}`, {
+      path: "/",
+      expires: expirationDate,
+    });
   } catch (error) {
-    dispatch(errorHandle(error.response.data.message));
-    console.log(error.response.data.message);
+    return dispatch(errorHandle(error.response.data.message));
   }
 };
 
@@ -38,7 +40,6 @@ export const requestUserCheck = async () => {
     console.log(statusText);
     return statusText;
   } catch (error) {
-    console.log(error.response.data.message);
     return error.response.data.message;
   }
 };
