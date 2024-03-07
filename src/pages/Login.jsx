@@ -1,16 +1,27 @@
 import React from "react";
 import LoginForm from "../components/common/LoginForm";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { requestLogin } from "../axios/api";
+import { LoginSignupLayout, H2, LoginSignupContainer } from "../styles/LoginFormStyleModule";
+import withAuth from "../HOC/withAuth";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const handleGotoSignup = () => {
+    navigate("/signup");
+  };
+
   return (
-    <>
-      <LoginForm handleUserApi={requestLogin}>로그인</LoginForm>
-      <Link to="/signup">회원가입</Link>
-      <Link to="/">메인페이지</Link>
-    </>
+    <LoginSignupLayout>
+      <H2>로그인 페이지</H2>
+      <LoginSignupContainer>
+        <LoginForm handleUserApi={requestLogin} handleGotoPage={handleGotoSignup}>
+          로그인
+        </LoginForm>
+      </LoginSignupContainer>
+    </LoginSignupLayout>
   );
 }
 
-export default Login;
+export default withAuth(Login, true);
